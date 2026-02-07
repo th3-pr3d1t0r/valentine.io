@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Be My Valentine 💖</title>
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #fff0f6;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.container {
+  text-align: center;
+  width: 100%;
+  max-width: 420px;
+  padding: 24px;
+}
+
+#bear {
+  width: 220px;
+  margin-bottom: 22px;
+  animation: breathe 3.5s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+#bear.celebrating {
+  animation: celebrate 0.6s ease-out forwards;
+}
+
+@keyframes celebrate {
+  0% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-8px) scale(1.05); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+h1 {
+  color: #d65b84;
+  font-size: 24px;
+  margin-bottom: 26px;
+}
+
+.button-row {
+  position: relative;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+button {
+  padding: 14px 36px;
+  font-size: 18px;
+  border-radius: 999px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#yesBtn {
+  background: #ff6b9d;
+  color: white;
+}
+
+#noBtn {
+  background: white;
+  color: #d65b84;
+  border: 2px solid #ffc1d6;
+  position: absolute;
+  right: 0;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.success {
+  margin-top: 14px;
+  font-size: 20px;
+  color: #d65b84;
+  animation: fadeIn 0.4s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.hearts {
+  opacity: 0;
+}
+
+.hearts.celebrating {
+  animation: heartsFloat 1.2s ease-out forwards;
+}
+
+@keyframes heartsFloat {
+  0% { 
+    opacity: 0;
+    transform: translateY(0) scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-20px) scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(-15px) scale(1);
+  }
+}
+
+#leftArm, #rightArm {
+  transition: all 0.5s ease-out;
+  transform-origin: center;
+}
+
+#leftArm.raised {
+  animation: raiseLeftArm 0.5s ease-out forwards;
+}
+
+#rightArm.raised {
+  animation: raiseRightArm 0.5s ease-out forwards;
+}
+
+@keyframes raiseLeftArm {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-25deg) translateY(-15px); }
+}
+
+@keyframes raiseRightArm {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(25deg) translateY(-15px); }
+}
+
+#heart {
+  transition: all 0.6s ease-out;
+}
+
+#heart.thrown {
+  animation: throwHeart 0.8s ease-out forwards;
+}
+
+@keyframes throwHeart {
+  0% { 
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(0, -40px) scale(0.8);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(0, -30px) scale(0.7);
+    opacity: 0;
+  }
+}
+
+canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<svg id="bear" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <circle cx="60" cy="48" r="15" fill="#E0AD6A" stroke="#6B3F2A" stroke-width="3"/>
+    <circle cx="140" cy="48" r="15" fill="#E0AD6A" stroke="#6B3F2A" stroke-width="3"/>
+    <circle cx="60" cy="50" r="7" fill="#F0C68A"/>
+    <circle cx="140" cy="50" r="7" fill="#F0C68A"/>
+  </g>
+
+  <ellipse cx="100" cy="80" rx="50" ry="44" fill="#E0AD6A" stroke="#6B3F2A" stroke-width="3"/>
+
+  <ellipse cx="100" cy="145" rx="42" ry="35" fill="#E0AD6A" stroke="#6B3F2A" stroke-width="3"/>
+
+  <ellipse id="leftArm" cx="70" cy="135" rx="13" ry="24" fill="#E0AD6A" stroke="#6B3F2A" stroke-width="3" transform="rotate(-15 70 135)"/>
+  
+  <ellipse id="rightArm" cx="130" cy="135" rx="13" ry="24" fill="#E0AD6A" stroke="#6B3F2A" stroke-width="3" transform="rotate(15 130 135)"/>
+
+  <g id="heart">
+    <path d="M100 155 Q85 135 75 125 Q65 115 65 105 Q65 90 75 85 Q85 80 95 90 Q100 95 100 95 Q100 95 105 90 Q115 80 125 85 Q135 90 135 105 Q135 115 125 125 Q115 135 100 155 Z" 
+          fill="#ff69b4" stroke="#6B3F2A" stroke-width="3"/>
+    <ellipse cx="105" cy="120" rx="8" ry="12" fill="rgba(255,255,255,0.4)"/>
+  </g>
+
+  <ellipse cx="80" cy="175" rx="18" ry="12" fill="#E0AD6A" stroke="#6B3F2A" stroke-width="3"/>
+  <ellipse cx="80" cy="177" rx="10" ry="7" fill="#F0C68A"/>
+  <ellipse cx="120" cy="175" rx="18" ry="12" fill="#E0AD6A" stroke="#6B3F2A" stroke-width="3"/>
+  <ellipse cx="120" cy="177" rx="10" ry="7" fill="#F0C68A"/>
+
+  <g id="face">
+    <ellipse id="leftEye" cx="88" cy="76" rx="4" ry="5" fill="#3A3A3A"/>
+    <ellipse id="rightEye" cx="112" cy="76" rx="4" ry="5" fill="#3A3A3A"/>
+    <circle cx="89.5" cy="74.5" r="1.5" fill="white" opacity="0.8"/>
+    <circle cx="113.5" cy="74.5" r="1.5" fill="white" opacity="0.8"/>
+    <ellipse cx="75" cy="86" rx="7" ry="4" fill="#FFB3C1" opacity="0.8"/>
+    <ellipse cx="125" cy="86" rx="7" ry="4" fill="#FFB3C1" opacity="0.8"/>
+    <ellipse cx="100" cy="88" rx="3" ry="2.5" fill="#3A3A3A"/>
+    <path id="mouth"
+      d="M100 88 L100 92 M95 92 Q100 96 105 92"
+      stroke="#3A3A3A"
+      stroke-width="2.5"
+      fill="none"
+      stroke-linecap="round"/>
+  </g>
+
+  <g id="loveHearts" class="hearts">
+    <path d="M40 70 C32 62 22 64 22 76 C22 88 40 98 40 98 C40 98 58 88 58 76 C58 64 48 62 40 70 Z"
+          fill="#FF8FA3"/>
+    <path d="M160 70 C152 62 142 64 142 76 C142 88 160 98 160 98 C160 98 178 88 178 76 C178 64 168 62 160 70 Z"
+          fill="#FF8FA3"/>
+  </g>
+</svg>
+
+<h1 id="text">Will you be my Valentine?</h1>
+
+<div class="button-row" id="row">
+  <button id="yesBtn">YES</button>
+  <button id="noBtn">NO</button>
+</div>
+
+<div id="result"></div>
+</div>
+
+<canvas id="confetti"></canvas>
+
+<script>
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const row = document.getElementById("row");
+const text = document.getElementById("text");
+const result = document.getElementById("result");
+const hearts = document.getElementById("loveHearts");
+const mouth = document.getElementById("mouth");
+const bear = document.getElementById("bear");
+const leftArm = document.getElementById("leftArm");
+const rightArm = document.getElementById("rightArm");
+const heart = document.getElementById("heart");
+const leftEye = document.getElementById("leftEye");
+const rightEye = document.getElementById("rightEye");
+
+let noCount = 0;
+const maxMoves = 3;
+
+noBtn.addEventListener("click", () => {
+  if (noCount >= maxMoves) {
+    noBtn.style.left = "";
+    noBtn.style.right = "0";
+    noCount = 0;
+    return;
+  }
+
+  const rowRect = row.getBoundingClientRect();
+  const yesRect = yesBtn.getBoundingClientRect();
+  const noRect = noBtn.getBoundingClientRect();
+
+  let x, tries = 0;
+  do {
+    x = Math.random() * (rowRect.width - noRect.width);
+    tries++;
+    if (tries > 20) break;
+  } while (
+    x < yesRect.right - rowRect.left + 8 &&
+    x + noRect.width > yesRect.left - rowRect.left - 8
+  );
+
+  noBtn.style.right = "auto";
+  noBtn.style.left = `${x}px`;
+  noCount++;
+});
+
+yesBtn.addEventListener("click", () => {
+  yesBtn.disabled = true;
+  noBtn.disabled = true;
+  noBtn.style.display = "none";
+
+  // Happy face transformation
+  mouth.setAttribute("d", "M92 92 Q100 98 108 92");
+  
+  // Eyes become happy curves
+  leftEye.setAttribute("ry", "3");
+  leftEye.setAttribute("cy", "77");
+  rightEye.setAttribute("ry", "3");
+  rightEye.setAttribute("cy", "77");
+
+  // Celebrate animation
+  bear.classList.add("celebrating");
+  
+  // Throw heart up
+  heart.classList.add("thrown");
+  
+  // Raise arms
+  setTimeout(() => {
+    leftArm.classList.add("raised");
+    rightArm.classList.add("raised");
+  }, 100);
+  
+  setTimeout(() => {
+    hearts.classList.add("celebrating");
+  }, 300);
+
+  text.innerHTML = "Thank you for saying yes 💖";
+  result.innerHTML = "You made me really happy  omo this shii was like wayyy harder than i expected i really love youuu.";
+  result.className = "success";
+
+  confetti();
+});
+
+function confetti() {
+  const canvas = document.getElementById("confetti");
+  const ctx = canvas.getContext("2d");
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+
+  const parts = Array.from({length: 120}, () => ({
+    x: canvas.width / 2,
+    y: canvas.height / 2,
+    vx: (Math.random() - 0.5) * 8,
+    vy: Math.random() * -6 - 2,
+    r: Math.random() * 4 + 3,
+    c: ["#ff6b9d","#ffb3d1","#ffc1d6"][Math.floor(Math.random()*3)],
+    life: 100
+  }));
+
+  (function animate(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    parts.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.25;
+      p.life--;
+      ctx.globalAlpha = p.life / 100;
+      ctx.fillStyle = p.c;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fill();
+    });
+    if (parts.some(p => p.life > 0)) requestAnimationFrame(animate);
+  })();
+}
+</script>
+
+</body>
+</html>
